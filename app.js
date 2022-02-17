@@ -3,14 +3,18 @@ const canvas = document.getElementById("jsCanvas")
 const ctx = canvas.getContext('2d')
 // class명으로 색상정보 가져오기
 const colors = document.getElementsByClassName("jsColor")
+// id로 brush size 값으로 쓰일 range 값 가져오기
+const range = document.getElementById("jsRange")
 
 // pixel modifier에게 canvas의 크기 지정해서 위치 알려주기
 canvas.width = 800;
 canvas.height = 800;
 
+ctx.strokeStyle = "#000000"
 ctx.lineWidth = 2.5;
 
 let painting = false;
+
 
 function stopPainting () {
   painting = false;
@@ -34,20 +38,17 @@ function onMouseMove(event) {
   }
 };
 
-// 이벤트 리스너에서 mousedown 보고 startpainting 해주기 때문에 onMouseDown function 삭제
-// function onMouseDown (event) {
-//   painting = true;
-//   console.log(event);
-// };
-
 function handleColorClick (event) {
-  // 스타일 속성 확인하기
-  //console.log(event.target.style)
   // 스타일 속성 > backgroundColor 값 불러오기
   const color = event.target.style.backgroundColor
-  // console.log(color)
-  // 상단에 있던 style 속성 데려옴
+  // style 속성 변경
   ctx.strokeStyle = color
+}
+
+function handleRangeChange (event) {
+  console.log(event.target.value)
+  const size = event.target.value
+  ctx.lineWidth = size;
 }
 
 if (canvas) {
@@ -59,3 +60,9 @@ if (canvas) {
 
 // 색 값을 가져오기 위해 배열생성
 Array.from(colors).forEach(color => color.addEventListener("click", handleColorClick))
+
+// range가 변경되는 것을 확인하려고
+if (range) {
+  range.addEventListener("input", handleRangeChange)
+}
+
