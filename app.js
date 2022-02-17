@@ -7,6 +7,8 @@ const colors = document.getElementsByClassName("jsColor")
 const range = document.getElementById("jsRange")
 // fill, line mode 전환을 위해 쓰일 값 가져오기
 const mode = document.getElementById("jsMode")
+// 저장버튼 활성화
+const saveBtn = document.getElementById("jsSave")
 
 // 무언가 값이나 단어가 반복되기 시작하면 새로운 변수 생성하는게 좋다
 const INITIAL_COLOR = "#000000"
@@ -15,6 +17,10 @@ const CANVAS_SIZE = 800
 // pixel modifier에게 canvas의 크기 지정해서 위치 알려주기
 canvas.width = CANVAS_SIZE
 canvas.height = CANVAS_SIZE
+
+// canvas background default color white 지정하는 것, 안하면 투명이 기본
+ctx.fillStyle = "white"
+ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE)
 
 ctx.strokeStyle = INITIAL_COLOR
 ctx.fillStyle = INITIAL_COLOR
@@ -74,8 +80,20 @@ function handleCanvasClick (event) {
   if (filling) {
   // 채워지는 사각형의 크기는 캔버스의 크기와 같아야 함
   ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE)
-  
   }
+}
+
+function handleCM (event) {
+  event.preventDefault()
+}
+
+function handleSaveClick (event) {
+  const image = canvas.toDataURL("image/png")
+  const link = document.createElement("a")
+  link.href = image
+  link.download = "PaintJS"
+  console.log(link)
+  link.click()
 }
 
 if (canvas) {
@@ -84,6 +102,8 @@ if (canvas) {
   canvas.addEventListener("mouseup", stopPainting);
   canvas.addEventListener("mouseleave", stopPainting);
   canvas.addEventListener("click", handleCanvasClick);
+
+  canvas.addEventListener("contextmenu", handleCM)
 }
 
 // 색 값을 가져오기 위해 배열생성
@@ -96,4 +116,8 @@ if (range) {
 
 if (mode) {
   mode.addEventListener("click", handleModeClick)
+}
+
+if (saveBtn) {
+  saveBtn.addEventListener("click", handleSaveClick)
 }
